@@ -1,0 +1,52 @@
+// use prisma-8
+
+model User {
+  id          Uuid       @id        @onCreate(uuid())
+  username    String     @unique
+  name        String?
+  password    String
+  posts       Blog[]
+}
+
+model Blog {
+  id          Uuid        @id       @onCreate(uuid())
+  authorId    Uuid
+  title       String
+  content     String
+  published   Boolean     @default(false)
+  author      User        @relation(fields: [authorId], references: [id])
+}
+
+// bunx prisma contract emit
+// bunx prisma db init
+
+// after change directly
+// bunx prisma db update => as ts.config has url;
+// bunx prisma db update --db "$DATABASE_URL"
+
+
+
+// https://www.prisma.io/docs/orm/coming-from-prisma-orm-7#commands
+
+// prisma migrate => npx prisma contract emit
+// prisma migrate dev => prisma db update / [directly change to neon; without mig files]
+                      // prisma migration plan --name add_user_phone; 
+                      // prisma db migrate
+
+
+// "db:init" => Runs a custom script defined in your package.json.
+// "db:init": "prisma db init",
+
+// 1st Time;
+// bun run db:init ["db:init": "prisma db init"] / or
+// -> bunx prisma contract emit => Generates contract.json and contract.d.ts from contract.prisma.
+// -> bunx prisma db init => Creates the database from the contract and records its state.
+
+// 2nd Time;
+// bunx prisma contract emit
+// bunx prisma migration plan => create migration file 
+// bunx prisma migration show <migration-directory> => sql preview
+// bunx prisma db migrate --advance-ref db => apply to neon;
+
+// bunx prisma migration show /Users/TejwantKaur/Desktop/90-days/Projects/CloudFlare_HonoPrisma/backend/migrations/app/20261024T1419_migration
+
